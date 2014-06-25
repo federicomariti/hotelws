@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Body>
+		<!-- commento xml -->
+		<ricercaStanza xmlns="http://www.hotel.com/ricerca/">
+			<arrivo>2011-12-31</arrivo>
+			<partenza>2012-01-28</partenza>
+			<stanza xmlns:hotel="http://www.hotel.com/">
+				<hotel:numAdulti>2</hotel:numAdulti>
+				<hotel:numBambini>2</hotel:numBambini>
+			</stanza>
+		</ricercaStanza>
+	</soap:Body>
+</soap:Envelope>

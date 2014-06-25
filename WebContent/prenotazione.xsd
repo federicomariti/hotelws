@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.hotel.com/prenotazione/"
+	xmlns:tns="http://www.hotel.com/prenotazione/" elementFormDefault="qualified"
+	xmlns:hotel="http://www.hotel.com/">
+
+  <import namespace="http://www.hotel.com/" schemaLocation="hotel.xsd" />
+
+  <element name="prenotazione" type="tns:prenotazione" />
+  <element name="prenotazioneResponse" type="tns:prenotazioneResponse" />
+  <element name="cancellaPrenotazione" />
+  <element name="cancellaPrenotazioneResponse" />
+
+
+  <complexType name="prenotazione">
+    <annotation><documentation>
+	La prenotazione contiene tutte le informazioni presenti in una
+	ricerca di stanza, in piu' l'identificatore della stanza ricevuto 
+	precedentemente dall'hotel nella risposta ad una operazione di ricerca, le
+	informazioni sul cliente e la relativa carta di credito.
+    </documentation></annotation>
+    <sequence>
+      <element name="sessionId" type="string" />
+      <element name="arrivo" type="date" />
+      <element name="partenza" type="date" />
+      <element name="stanzaId" type="hotel:stanzaId" />
+      <element name="stanza" type="hotel:stanza" />
+      <element name="persona" type="hotel:persona" />
+      <element name="cartaCredito" type="hotel:cartaCredito" />
+      <!-- <element name="indirizzo" type="hotel:indirizzo /> -->
+    </sequence>
+  </complexType>
+  
+  <complexType name="prenotazioneResponse">
+    <annotation><documentation>
+	La risposta ad una richiesta di prenotazione di una stanza
+	ritorna l'esito della prenotazione che ne manifesta lo stato.
+	Se piu' tipologie di camere soddisfano la richiesta di
+	prenotazione allora l'esito e' "non prenotata" (NL) e vengono
+	mostrate le possibili scelte di camere che soddisfano la
+	domanda di prenotazione. Se l'esisto e' positivo viene
+	ritornato l'identificatore della prenotazione.
+    </documentation></annotation>
+    <sequence>
+      <element name="sessionId" type="string" />
+      <element name="esito" type="hotel:statoPrenotazione" />
+      <element name="prenotazioneId" minOccurs="0" type="string" />
+      <element name="rispostaHotel" minOccurs="0" maxOccurs="unbounded" type="hotel:rispostaHotel" />
+    </sequence>
+  </complexType>
+  
+</schema>

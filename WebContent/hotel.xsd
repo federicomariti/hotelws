@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.hotel.com/"
+	xmlns:tns="http://www.hotel.com/" elementFormDefault="qualified">
+
+  <simpleType name="positiveInteger"><restriction base="int"><minInclusive value='0' /></restriction></simpleType>
+	
+  <simpleType name="tipoStanza">
+    <restriction base="int">
+      <enumeration value="1"><annotation><documentation>Suite per famiglia</documentation></annotation></enumeration>
+      <enumeration value="2"><annotation><documentation>Camera Doppia</documentation></annotation></enumeration>
+      <enumeration value="3"><annotation><documentation>Camera Singola</documentation></annotation></enumeration>
+      <enumeration value="4"><annotation><documentation>Suite Executive</documentation></annotation></enumeration>
+    </restriction>
+  </simpleType>
+
+  <simpleType name="listaEta">
+    <annotation><documentation> 
+	utile per definire l'eta dei bambini
+	nella richiesta/prenotazione di una stanza
+    </documentation></annotation>
+    <list><simpleType>
+	<restriction base="tns:positiveInteger" />
+    </simpleType></list>
+  </simpleType>
+
+
+  <complexType name="stanza">
+    <annotation><documentation>
+	Una stanza e' caratterizzata dal numero di adulti e dal numero
+	di bambini che puo' ospitare. Altri parametri aggiuntivi utili per la
+	risposta alla ricerca di una stanza sono il tipo della stanza, la 
+	descrizione ed i servizi extra presenti. L'eta dei bambini puo' essere 
+	specificata in una richiesta di prenotazione
+    </documentation></annotation>
+    <sequence>
+      <element name="numAdulti" type="tns:positiveInteger" />
+      <element name="numBambini" type="tns:positiveInteger" />
+      <element name="etaBambini" minOccurs="0" type="tns:listaEta">
+	<annotation><documentation>asdf</documentation></annotation>
+      </element>
+      <element name="codiceTipoStanza" minOccurs="0" type="tns:tipoStanza" />
+      <element name="tipoStanza" minOccurs="0" type="string" />
+      <element name="descrizione" minOccurs="0" type="string" />
+      <element name="servizi" minOccurs="0" type="string" />
+    </sequence>
+  </complexType>
+
+  <complexType name="costoStanza">
+    <sequence>
+      <element name="valuta" type="string" />
+      <element name="perNotte" type="double" />
+      <element name="totale" type="double" />
+    </sequence>
+  </complexType>
+
+  <simpleType name="stanzaId">
+  	<annotation><documentation>
+  	Una string arbitraria usata dall'hotel per identivicare im modo univoco un
+  	certo tipo di stanza dell'hotel stesso. Stanze appartenenti allo stesso tipo
+  	({http://www.hotel.com/hotel/}:tipoStanza) possono avere distinte dall'hotel
+  	se hanno servizi e quini costo diverso. 
+  	</documentation></annotation>
+  	<restriction base="string" />
+  </simpleType>
+
+  <complexType name="rispostaHotel">
+    <annotation><documentation>
+	Usato nelle risposte alla ricerca/prenotazione di stanze per
+	definire un insieme di stanze che rispettano i vincoli imopsti
+	nella ricerca/prenotazione. Ogni stanza nella risposta ha il
+	relativo costo, per notte e totale. 
+    </documentation></annotation>
+    <sequence>
+      <element name="stanza" type="tns:stanza" />
+      <element name="disponibilita" type="tns:positiveInteger" />
+      <element name="stanzaId" type="tns:stanzaId" />
+      <element name="costo" type="tns:costoStanza" />
+    </sequence>
+  </complexType>
+
+  <simpleType name="statoPrenotazione">
+    <restriction base="string">
+	  <enumeration value="ER"><annotation><documentation>errore</documentation></annotation></enumeration>
+      <enumeration value="CF"><annotation><documentation>confermata</documentation></annotation></enumeration>
+      <enumeration value="PD"><annotation><documentation>pendente</documentation></annotation></enumeration>
+      <enumeration value="NL"><annotation><documentation>nullo, prenotazione ambigua</documentation></annotation></enumeration>
+      <enumeration value="CN"><annotation><documentation>cancellata</documentation></annotation></enumeration>
+     </restriction>
+  </simpleType>
+
+  <complexType name="persona">
+    <sequence>
+      <element name="codiceFiscale"> 
+      	<simpleType><restriction base="string">
+      	  <maxLength value="16" />
+      	</restriction></simpleType>
+      </element>
+      <element name="nome" type="string" minOccurs="0" />
+      <element name="cognome" type="string" minOccurs="0"/>
+      <element name="email" type="string" minOccurs="0" />
+      <element name="telefono" type="string" minOccurs="0" />
+      <element name="indirizzo" minOccurs="0" />
+    </sequence>
+  </complexType>
+
+  <complexType name="indirizzo">
+    <sequence>
+      <element name="indirizzo" type="string" />
+      <element name="citta" type="string" />
+      <element name="stato" type="string" />
+      <element name="paese" type="string" />
+      <element name="codicePostale" type="int" />
+    </sequence>
+  </complexType>
+
+  <complexType name="cartaCredito">
+    <sequence>
+      <element name="Tipo" type="string" />
+      <element name="Numero" type="int" />
+      <element name="Identificatore" type="int" />
+      <element name="scadenzaAnnoMese" type="gYearMonth" />
+    </sequence>
+  </complexType>
+  
+</schema>

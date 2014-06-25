@@ -1,0 +1,235 @@
+
+
+
+
+\subsection{Ulteriori specifiche}
+\begin{itemize}
+\item Viene usata una unica macchina dove sono allocate tutte le
+  funzionalit\`a del lato server, ovvero il Proxy, i due web service,
+  il server del database sono eseguiti tutti nello stesso nodo.
+\end{itemize}
+
+
+\begin{comment}
+Gli elementi \verb'ricercans:ricercaStanza' e
+\verb'prenotns:prenotazione' sono usati per realizzare le operazioni
+di ricerca e prenotazione di una stanza, mentre quelli di
+\verb'ricercans:ricercaStanzaResponse' e
+\verb'prenotns:prenotazioneResponse' sono usati nella risposta alle
+precedenti operazioni. Dato che l'encoding dei dati nei messaggi SOAP
+\`e di tipo wrapped document-literal allora tali elementi sono il
+possibile contenuto della parte Body dei messaggi SOAP scambiati
+dall'applicazione.
+
+Gli elementi di ricerca e di prenotazione di una stanza contengono le
+informazioni sull'arrivo, la partenza e sulla stanza; un elemento
+\verb'hotelns:stanza' contiene diverse informazioni che descrivono
+una cambera d'albergo, tuttavia quelle necessarie per le operazioni di
+ricerca e prenotazione sono il numero di adulti e il numero di bambini
+ospitabili nella stanza, altre informazioni possono essere agginute
+nella ricerca/prenotazione ma non sono obbligatorie (ad esempio il
+codice del tipo della stanza nella ricerca, o l'eta dei bambini nella
+prenotazione). Le altre informazioni realtive alla stanza sono
+utilizzate nella risposta (ad esempio la descrizione della
+stanza). L'elemento di prenotazione inoltre contiene informazioni
+sull'identificatore della stanza che si vuole prenotare, e sulla
+persona che effettua l'ordine e la carta di credito con cui effettuare
+il pagamento. L'identificatore delle stanza deve essere uno di quelli
+reperiti da precedenti risposte dell'hotel alle ricerce di stanza. Si
+osserva che l'identificatore di una stanza, \verb'hotelns:stanzaId' in
+'prenotazione' e 'prenotazioneResponse' \`e usato dall'hotel per
+identificare univocamente una stanza con certi servizi ed un certo
+costo, mentre il codice del tipo della stanza, 'codiceTipoStanza' in
+identifica una macro categoria a cui la stanza appartiene.
+\end{comment}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\begin{comment}
+ACID atomicita consistenza isolazione durabilita
+
+dirty read
+- lettura di una riga che ha subito un aggiornamento da una
+  transazione che nel futuro termina con rollback
+> non si verifica mai, una operazione di una transazione non ha mai
+  visione delle modifiche non committate
+
+unrepeatable read
+- due letture consecutive della stessa riga ritornano risultati
+  diversi 
+
+lost update
+- una riga letta e successivamente scritta. tra tali due operazioni
+  un'altra transizione aggiorna la riga stessa e committa, tale
+  aggiornamento viene perso.
+
+phantom row 
+- due letture consecutive di un insieme di righe ritorna due insiemi
+  diversi di risultati.
+
+serializzable isolation level
+- selezione delle righe: per tutta la transazione si lavora su una
+  fotografia del database scattata all'avvio della transazione. 
+- aggiornamento, inserzione, cancellazione, selezione per
+  aggiornamento:  se una di queste operazioni seleziona una riga che
+  \`e stata aggiornata/cancellata in precedenza (ma dopo l'inizio
+  della nostra transazione) da un'altra transazione allora la nostra
+  transazione si blocca in attesa della terminazione dell'altra
+  transazione. Se questa termina con rollback la nostra transazione
+  procede normalmente, altrimenti il dbms genera un errore dovuto al
+  conflitto di serializzazione
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Creazione dei certificati X.509 e dei java key store}
+\begin{verbatim}
+$ cd <baseDir>/sources/resources/keystore/
+$ keytool -genkey -alias hotel -keypass hotelpassw -keystore
+hotel-keystore.jks -storepass storepass -dname "cn=Hotel" -keyalg RSA
+$ keytool -list -keystore hotel-keystore.jks -storepass storepass  -v
+
+Tipo keystore: jks
+Provider keystore: SUN
+
+Il keystore contiene 1 entry
+
+Nome alias: hotel
+Data di creazione: 5-gen-2012
+Tipo entry: keyEntry
+Lunghezza catena certificati: 1
+Certificato[1]:
+Proprietario: CN=Hotel
+Organismo di emissione: CN=Hotel
+Numero di serie: 4f056ebd
+Valido da Thu Jan 05 10:34:53 CET 2012 a Wed Apr 04 11:34:53 CEST 2012
+Impronte digitali certificato:
+ MD5: AA:0F:F6:9F:B8:6B:BA:18:EC:E9:02:EB:60:76:CA:7F
+ SHA1: 15:B5:FF:BB:A1:23:55:B2:60:82:7E:0A:39:29:5F:D2:47:B3:E4:8A
+
+
+*******************************************
+*******************************************
+
+$ keytool -export -keystore hotel-keystore.jks -storepass storepass
+-alias hotel -file hotel.rsa
+Il certificato ? memorizzato nel file <hotel.rsa>
+$ keytool -import -file hotel.rsa -keystore alice.truststore.jks
+-storepass storepass -alias hotel
+Proprietario: CN=Hotel
+Organismo di emissione: CN=Hotel
+Numero di serie: 4f056ebd
+Valido da Thu Jan 05 10:34:53 CET 2012 a Wed Apr 04 11:34:53 CEST 2012
+Impronte digitali certificato:
+ MD5: AA:0F:F6:9F:B8:6B:BA:18:EC:E9:02:EB:60:76:CA:7F
+ SHA1: 15:B5:FF:BB:A1:23:55:B2:60:82:7E:0A:39:29:5F:D2:47:B3:E4:8A
+Considerare attendibile questo certificato? [no]:  si
+Il certificato ? stato aggiunto al keystore
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Esecuzione}
+\subsection{Client}
+Il Client usa il framework \emph{Spring}, controllato dalla
+configurazione in
+\verb'hotelBaseDir/sources/'\-\verb'java/com/hotel/client/beans.xml'; in
+tale file sono cablati gli indirizzi su cui sono pubblicati i due
+servizi web. Per il testing dell'applicazione tali indirizzi sono
+caratterizzati da host = \verb'localhost' e porta = \verb'2020'. Prima
+di eseguire i processi client, localmente, viene mandato in esecuzione
+un programma che faccia da proxy (ad esempio TcpMonitor) con i
+parametri porta locale = \verb'2020', host remoto =
+\verb'www.laiserver.com', porta remota = \verb'8080'; dove l'host e la
+porta remota fanno parte degli indirizzi in cui i servizi sono
+effettivamente pubblicati.
+
+\subsection{Uso di Ant}
+Per l'esecuzione con \emph{Ant} deveno essere impostate le seguenti
+properties in \verb'build.xml': 
+\begin{itemize}
+\item cxf.classpath, 
+\item commons-cli.jar.dir.
+\end{itemize}
+Mostra l'aiuto:
+\begin{verbatim}
+$ ant -buildfile <hotelBaseDir>/build.xml client -Darg1="--help"
+\end{verbatim}
+Esegue la ricerca:
+\begin{verbatim}
+$ ant -buildfile <hotelBaseDir>/build.xml client -Darg1="-o ricerca -b
+2011-12-30 -e 2012-01-02 -a 2 -c 2"
+\end{verbatim}
+ovvero:
+\begin{verbatim}
+$ ant -buildfile<hotelBaseDir>/build.xml client -Darg1="
+> --operation ricerca 
+> --arrivo 2011-12-39 
+> --partenza 2012-01-02 
+> --numAdulti 2 
+> --numBambini 2"
+\end{verbatim}
+Esegue la prenotazione
+\begin{verbatim}
+$ ant -buildfile <hotelBaseDir>/build.xml client -Darg1="-o prenotazione
+-s 1A0 -b 2011-12-30 -e 2012-01-02 -a 2 -c 2 -p
+ASDFGHJ123456789:Federico:Mariti:federico.mariti@gmail.com:1234 -C
+visa:123:456:2014-01"
+\end{verbatim}
+ovvero:
+\begin{verbatim}
+$ ant -buildfile build.xml client -Darg1="
+> --operation prenotazione
+> --stanzaId 1A0
+> --arrivo 2011-12-39 
+> --partenza 2012-01-02 
+> --numAdulti 2 
+> --numBambini 2
+> --persona
+ASDFGHJ123456789:Federico:Mariti:federico.mariti@gmail.com:1234
+> --cartaCredito visa:123:456:2014-01"
+\end{verbatim}
+
+\subsection{Invocazione da shell}
+\begin{verbatim}
+$ CP_MY=build/classes/
+$ CP_CXF=/usr/share/java/apache-cxf-2.2.6/lib/
+$ CP_CLI=/usr/share/java/apache-commons-cli-1.2/commons-cli-1.2.jar 
+$ export CLASSPATH=$CP_MY:$CP_CLI:`allJars.sh $CP_CXF`
+$ java com.hotel.client.Client --help
+\end{verbatim}
+Dove \verb'allJars.sh' \`e
+\begin{lstlisting}[language=bash]
+#!/bin/bash
+RESULT=
+for j in ``$@'' ; do
+    for i in `ls ``$j''` ; do
+        if [ ``${i##*.}'' = ``jar'' ] ; then 
+            RESULT=''${RESULT}:${j}/${i}''
+        fi
+
+    done
+done
+echo ``$RESULT''
+\end{lstlisting}
+%$
+
+
+\begin{comment}
+\begin{thebibliography}{9}
+\bibitem{ref:ricerca.wsdl}baseDir/WebContent/ricerca.wsdl
+\bibitem{ref:prenotazione.wsdl}baseDir/WebContent/prenotazione.wsdl
+\bibitem{ref:Proxy.java}baseDir/sources/java/com/hotel/servlet/Proxy.java
+\bibitem{ref:RicercaImpl}com.hotel.ws.ricerca.RicercaImpl
+\end{thebibliography}
+\end{comment}
+
+\end{document}
+

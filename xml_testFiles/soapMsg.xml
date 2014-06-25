@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://schemas.xmlsoap.org/soap/envelope/ ../WebContent/envelope.xml" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soap:Header></soap:Header>
+	<soap:Body>
+		<!-- commento xml -->
+		<xsd:annotation><xsd:documentation>xsd documentatione</xsd:documentation></xsd:annotation>
+		<soapBodyElement1>blablabla</soapBodyElement1>
+		<soapBodyElement2>zxcvqwerasdf</soapBodyElement2>
+	</soap:Body>
+	
+</soap:Envelope>

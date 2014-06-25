@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:tns="http://www.hotel.com/ws/prenotazione/"
+	xmlns:prenot="http://www.hotel.com/prenotazione/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="prenotazione" targetNamespace="http://www.hotel.com/ws/prenotazione/">
+
+	<wsdl:types>
+		<xsd:schema>
+			<xsd:import schemaLocation="prenotazione.xsd"
+				namespace="http://www.hotel.com/prenotazione/" />
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="prenotazione">
+		<wsdl:part name="parameters" element="prenot:prenotazione" />
+	</wsdl:message>
+	<wsdl:message name="prenotazioneResponse">
+		<wsdl:part name="return" element="prenot:prenotazioneResponse" />
+	</wsdl:message>
+
+	<wsdl:portType name="prenotazione">
+		<wsdl:operation name="prenotazione">
+			<wsdl:input name="prenotazione" message="tns:prenotazione" />
+			<wsdl:output name="prenotazioneResponse" message="tns:prenotazioneResponse" />
+
+		</wsdl:operation>
+
+	</wsdl:portType>
+
+	<wsdl:binding name="prenotazioneSoapBinding" type="tns:prenotazione">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="prenotazione">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="prenotazione">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="prenotazioneResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="prenotazioneService">
+		<wsdl:port name="prenotazione" binding="tns:prenotazioneSoapBinding">
+			<soap:address location="http://localhost:8080/prenotazione" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

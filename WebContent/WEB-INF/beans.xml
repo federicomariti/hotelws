@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
+	<jaxws:endpoint id="ricerca" implementor="com.hotel.ws.ricerca.RicercaImpl"
+		address="/ricerca">
+		<jaxws:outInterceptors>
+			<!-- signature -->
+			<ref bean="signResponse" />
+		</jaxws:outInterceptors>
+	</jaxws:endpoint>
+		
+	<jaxws:endpoint id="prenotazione"
+		implementor="com.hotel.ws.prenotazione.PrenotazioneImpl" 
+		address="/prenotazione">
+		<jaxws:inInterceptors>
+			<!-- decryption -->
+			<ref bean="decryptRequest" />
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<!-- signature -->
+			<ref bean="signResponse" />
+		</jaxws:outInterceptors>
+	</jaxws:endpoint>
+
+
+	<bean id="signResponse" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+		<constructor-arg>
+			<map>
+				<entry key="action" value="Timestamp Signature" />
+
+				<entry key="timeToLive" value="50" />
+				
+				<entry key="user" value="hotel" />
+				<entry key="signaturePropFile" value="etc/hotel-keystore.properties" />
+				<entry key="passwordCallbackClass" value="com.hotel.ws.PasswordCallback" />
+ 				<entry key="signatureParts" value="{Element}{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd}Timestamp;{Element}{http://schemas.xmlsoap.org/soap/envelope/}Body" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="decryptRequest" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+		<constructor-arg>
+			<map>
+				<entry key="action" value="Timestamp Encrypt" />
+				
+				<entry key="decryptionPropFile" value="etc/hotel-keystore.properties" />
+				<entry key="passwordCallbackClass" value="com.hotel.ws.PasswordCallback" />		
+				<entry key="encryptionParts" value="{Element}{http://www.hotel.com/prenotazione/}cartaCredito" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+</beans>

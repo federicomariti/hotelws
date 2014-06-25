@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ricercaStanza xmlns="http://www.hotel.com/ricerca/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.hotel.com/ricerca/ ../WebContent/ricerca.xsd"
+	xmlns:hotel="http://www.hotel.com/" >
+	<sessionId>123456ADCDEF</sessionId>
+	<arrivo>2011-12-31</arrivo>	
+	<partenza>2012-01-28</partenza>
+	<stanza>
+		<hotel:numAdulti>2</hotel:numAdulti>
+		<hotel:numBambini>2</hotel:numBambini>
+		<hotel:etaBambini>2 12</hotel:etaBambini>
+		<hotel:codiceTipoStanza>1</hotel:codiceTipoStanza>
+	</stanza>
+</ricercaStanza>

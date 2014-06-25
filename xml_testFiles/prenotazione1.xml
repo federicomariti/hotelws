@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prenotazione xmlns="http://www.hotel.com/prenotazione/">
+	<sessionId>123456ABCDEF</sessionId>
+	<arrivo>2011-12-30</arrivo>
+	<partenza>2012-01-06</partenza>
+	<stanzaId>1A0</stanzaId>
+	<stanza xmlns:t="http://www.hotel.com/">
+		<t:numAdulti>2</t:numAdulti>
+		<t:numBambini>2</t:numBambini>
+		<t:etaBambini>2 12</t:etaBambini>
+		<t:codiceTipoStanza>1</t:codiceTipoStanza>
+	</stanza>
+	<persona xmlns:t="http://www.hotel.com/">
+		<t:codiceFiscale>ASDFGHJ123456789</t:codiceFiscale>
+		<t:nome>mario</t:nome>
+		<t:cognome>rossi</t:cognome>
+		<t:email>mario.rossi@gmail.com</t:email>
+		<t:telefono>123456</t:telefono>
+	</persona>
+	<cartaCredito xmlns:t="http://www.hotel.com/">
+		<t:Tipo>visa</t:Tipo>
+		<t:Numero>1234</t:Numero>
+		<t:Identificatore>1234</t:Identificatore>
+		<t:scadenzaAnnoMese>2012-12</t:scadenzaAnnoMese>
+	</cartaCredito>
+</prenotazione>

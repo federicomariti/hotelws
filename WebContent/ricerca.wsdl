@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:tns="http://www.hotel.com/ws/ricerca/"
+	xmlns:ricerca="http://www.hotel.com/ricerca/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="ricerca" targetNamespace="http://www.hotel.com/ws/ricerca/">
+
+	<wsdl:types>
+		<xsd:schema>
+			<xsd:import schemaLocation="ricerca.xsd" namespace="http://www.hotel.com/ricerca/" />
+		</xsd:schema>
+		<xsd:schema targetNamespace = "http://www.hotel.com/ricerca/" >
+			<xsd:element name="faultString" type="xsd:string" />
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="ricercaStanza">
+		<wsdl:part name="parameters" element="ricerca:ricercaStanza" />
+	</wsdl:message>
+	<wsdl:message name="ricercaStanzaResponse">
+		<wsdl:part name="return" element="ricerca:ricercaStanzaResponse" />
+	</wsdl:message>
+	<wsdl:message name="faultResponse">
+		<wsdl:part name="return" element="ricerca:faultString" />
+	</wsdl:message>
+
+	<wsdl:portType name="ricerca">
+		<wsdl:operation name="ricercaStanza">
+			<wsdl:input name="ricercaStanza" message="tns:ricercaStanza" />
+			<wsdl:output name="ricercaStanzaResponse" message="tns:ricercaStanzaResponse" />
+			<wsdl:fault name="faultResponse" message="tns:faultResponse" />
+			
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="ricercaSoapBinding" type="tns:ricerca">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="ricercaStanza">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="ricercaStanza">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ricercaStanzaResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="faultResponse">
+				<soap:fault name="faultResponse" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="ricercaService">
+		<wsdl:port name="ricerca" binding="tns:ricercaSoapBinding">
+			<soap:address location="http://localhost:8080/ricerca" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

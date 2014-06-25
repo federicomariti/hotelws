@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.hotel.com/ricerca/"
+	xmlns:tns="http://www.hotel.com/ricerca/" 
+	xmlns:hotel="http://www.hotel.com/"
+	elementFormDefault="qualified">
+  
+  <import namespace="http://www.hotel.com/" schemaLocation="hotel.xsd" />
+  
+  <element name="ricercaStanza" type="tns:ricercaStanza" />
+  <element name="ricercaStanzaResponse" type="tns:ricercaStanzaResponse" />
+  
+  <complexType name="ricercaStanza">
+    <sequence>
+      <element name="sessionId" minOccurs="0" type="string" />
+      <element name="arrivo" type="date" />
+      <element name="partenza" type="date" />
+      <element name="stanza" type="hotel:stanza">
+        <annotation><documentation> 
+	    E' sufficente specificare il numero di adulti e il numero di bambini. La
+	    ricerca puo' essere raffinata inserendo il codice del tipo della stanza 
+	    che desidera cercare.
+	    </documentation></annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="ricercaStanzaResponse">
+    <sequence>
+      <element name="sessionId" type="string" />
+      <element name="rispostaHotel" minOccurs="0" maxOccurs="unbounded" type="hotel:rispostaHotel" />
+    </sequence>
+  </complexType>
+  
+</schema>

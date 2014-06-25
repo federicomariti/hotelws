@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>hotel</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>	
+	
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>WEB-INF/beans.xml</param-value>
+	</context-param>
+	
+	<servlet>
+		<description>
+			Servlet che realizza il proxy dell'hotel
+		</description>
+		
+		<display-name>HotelProxy</display-name>
+		<servlet-name>HotelProxy</servlet-name>
+		<servlet-class>com.hotel.servlet.Proxy</servlet-class>
+	
+		<init-param>
+			<description>I nomi dei web service di competenza della servlet Proxy</description>
+			<param-name>web-services</param-name>
+			<param-value>ricerca prenotazione</param-value>
+		</init-param>
+		<init-param>
+			<description>Gli schemi XML relativi ai web service</description>
+			<param-name>schemas</param-name>
+			<param-value>ricerca.xsd prenotazione.xsd</param-value>
+		</init-param>
+		<init-param>
+			<description>Gli endpoint in cui sono pubblicati i web service</description>
+			<param-name>endpoints</param-name>
+			<param-value>http://localhost:8080/hotel/ricerca http://localhost:8080/hotel/prenotazione</param-value>
+		</init-param>
+		<init-param>
+			<description>Le operazioni possibili per il web service 'ricerca'</description>
+			<param-name>ricerca-operations</param-name>
+			<param-value>ricercaStanza</param-value>
+		</init-param>
+		<init-param>
+			<description>Le operazioni possibili per il web service 'prenotazione'</description>
+			<param-name>prenotazione-operations</param-name>
+			<param-value>prenotazione</param-value>
+		</init-param>
+		<init-param>
+			<description></description>
+			<param-name>prenotazione-encrypt</param-name>
+			<param-value>true</param-value>
+		</init-param>
+
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>HotelProxy</servlet-name>
+		<url-pattern>/proxy</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<display-name>CXF Servlet</display-name>
+		<servlet-name>CXFServlet</servlet-name>
+		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CXFServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>

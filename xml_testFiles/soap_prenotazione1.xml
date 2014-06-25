@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+	<Body>
+		<prenotazione xmlns="http://www.hotel.com/prenotazione/"
+			xmlns:h="http://www.hotel.com/">
+			<sessionId>123456ABCDEF</sessionId>
+			<arrivo>2012-02-02</arrivo>
+			<partenza>2012-02-12</partenza>
+			<stanzaId>1A0</stanzaId>
+			<stanza>
+				<h:numAdulti>2</h:numAdulti>
+				<h:numBambini>2</h:numBambini>
+				<h:etaBambini>2 12</h:etaBambini>
+			</stanza>
+			<persona>
+				<h:nome>mario</h:nome>
+				<h:cognome>rossi</h:cognome>
+				<h:email>mario.rossi@gmail.com</h:email>
+				<h:telefono>123456</h:telefono>
+			</persona>
+			<cartaCredito>
+				<h:Tipo>visa</h:Tipo>
+				<h:Numero>1234</h:Numero>
+				<h:Identificatore>1234</h:Identificatore>
+				<h:scadenzaAnnoMese>2012-12</h:scadenzaAnnoMese>
+			</cartaCredito>
+		</prenotazione>
+	</Body>
+</Envelope>

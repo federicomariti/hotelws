@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ricercaStanza xmlns="http://www.hotel.com/ricerca/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.hotel.com/ricerca/ ../WebContent/WEB-INF/ricerca.xsd">
+
+	<arrivo>2011-12-31</arrivo>	
+	<partenza>2012-01-28</partenza>
+	<stanza xmlns:t="http://www.hotel.com/">
+		<t:numAdulti>2</t:numAdulti>
+		<t:numBambini>2</t:numBambini>
+	</stanza>
+	
+</ricercaStanza>
+

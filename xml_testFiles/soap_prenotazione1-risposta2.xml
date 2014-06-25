@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prenotazioneResponse xmlns="http://www.hotel.com/prenotazione/">
+	<sessionId>123456ABCDEF</sessionId>
+	<esito>PD</esito>
+	<prenotazioneId>9876ABCD</prenotazioneId>
+</prenotazioneResponse>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+		
+	<jaxws:client id="ricerca_noProxy"  
+		serviceClass="com.hotel.ws.ricerca.Ricerca"
+		address="http://loclhost:2020/hotel/ricerca">
+		<jaxws:inInterceptors>
+			<!-- verify signature -->
+			<ref bean="verifyResponse" />
+		</jaxws:inInterceptors>
+	</jaxws:client>
+
+	<jaxws:client id="ricerca" serviceClass="com.hotel.ws.ricerca.Ricerca"
+		address="http://localhost:2020/hotel/proxy">
+		<jaxws:inInterceptors>
+			<!-- verify signature -->
+			<ref bean="verifyResponse" />
+		</jaxws:inInterceptors>
+	</jaxws:client>
+	
+
+		
+	<jaxws:client id="prenotazione_noProxy" 
+		serviceClass="com.hotel.ws.prenotazione.Prenotazione"
+		address="http://localhost:2020/hotel/prenotazione">
+		<jaxws:inInterceptors>
+			<!-- verify signature -->
+			<ref bean="verifyResponse" />
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<!-- encryption -->
+			<ref bean="encryptRequest" />
+		</jaxws:outInterceptors>
+	</jaxws:client>
+
+	<jaxws:client id="prenotazione" 
+		serviceClass="com.hotel.ws.prenotazione.Prenotazione"
+		address="http://localhost:2020/hotel/proxy">
+		<jaxws:inInterceptors>
+			<!-- verify signature -->
+			<ref bean="verifyResponse" />
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<!-- encryption -->
+			<ref bean="encryptRequest" />
+		</jaxws:outInterceptors>
+	</jaxws:client>
+
+	<bean id="encryptRequest" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+		<constructor-arg>
+			<map>
+				<entry key="action" value="Timestamp Encrypt" />
+
+				<entry key="timeToLive" value="50" />
+				
+				<entry key="encryptionUser" value="hotel" />
+				<entry key="encryptionPropFile" value="etc/clients-truststore.properties" />	
+				<entry key="encryptionParts" value="{Element}{http://www.hotel.com/prenotazione/}cartaCredito" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="verifyResponse" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+		<constructor-arg>
+			<map>
+				<entry key="action" value="Timestamp Signature" />
+				
+				<entry key="signaturePropFile" value="etc/clients-truststore.properties" />
+	 			<entry key="signatureParts" value="{Element}{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd}Timestamp;{Element}{http://schemas.xmlsoap.org/soap/envelope/}Body" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+</beans>

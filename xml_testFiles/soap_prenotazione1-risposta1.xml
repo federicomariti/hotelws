@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prenotazioneResponse xmlns="http://www.hotel.com/prenotazione/">
+	<sessionId>123456ABCDEF</sessionId>
+	<esito>NL</esito>
+	<rispostaHotel xmlns:t="http://www.hotel.com/">
+		<t:stanza>
+			<t:numAdulti>2</t:numAdulti>
+			<t:numBambini>2</t:numBambini>
+			<t:codiceTipoStanza>1</t:codiceTipoStanza>
+			<t:tipoStanza>suite per famiglia</t:tipoStanza>
+			<t:descrizione>Suite per famiglia con matrimoniale e due singoli</t:descrizione>
+		</t:stanza>
+		<t:disponibilita>5</t:disponibilita>
+		<t:stanzaId>1A0</t:stanzaId>
+		<t:costo>
+			<t:valuta>euro</t:valuta>
+			<t:perNotte>90</t:perNotte>
+			<t:totale>123</t:totale>
+		</t:costo>
+	</rispostaHotel>
+	<rispostaHotel xmlns:t="http://www.hotel.com/">
+		<t:stanza>
+			<t:numAdulti>2</t:numAdulti>
+			<t:numBambini>2</t:numBambini>
+			<t:codiceTipoStanza>4</t:codiceTipoStanza>
+			<t:tipoStanza>suite executive</t:tipoStanza>
+		</t:stanza>
+		<t:disponibilita>5</t:disponibilita>
+		<t:stanzaId>4A0</t:stanzaId>
+		<t:costo>
+			<t:valuta>euro</t:valuta>
+			<t:perNotte>120</t:perNotte>
+			<t:totale>1200</t:totale>
+		</t:costo>
+	</rispostaHotel>
+</prenotazioneResponse>
